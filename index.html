@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Noble AI · Diciptakan oleh Azrii</title>
+    <!-- Google Fonts + Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0A0E17;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+        }
+
+        /* FULLSCREEN APP LAYOUT */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            background: #0F1219;
+            position: relative;
+        }
+
+        /* HEADER PREMIUM */
+        .app-header {
+            background: rgba(18, 22, 32, 0.96);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-icon {
+            background: rgba(255,255,255,0.05);
+            width: 40px;
+            height: 40px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #E2B45E;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .menu-icon:active { background: rgba(226,180,94,0.2);}
+
+        .logo-area {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+        .logo-icon {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #E9C46A, #D4A537);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .app-title {
+            font-size: 1.55rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #F2E3C9, #DFB75A);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .badge-pro {
+            background: rgba(226,180,94,0.2);
+            padding: 4px 10px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #E2B45E;
+            border: 0.5px solid rgba(226,180,94,0.5);
+        }
+        .creator-badge {
+            background: rgba(226,180,94,0.15);
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #E9C46A;
+            margin-left: 8px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 12px;
+        }
+        .icon-btn {
+            background: rgba(255,255,255,0.04);
+            width: 40px;
+            height: 40px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #C0C5D0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .icon-btn:active { background: rgba(226,180,94,0.2); color: #E2B45E;}
+
+        /* MAIN CHAT AREA */
+        .chat-main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 18px 28px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scroll-behavior: smooth;
+        }
+        .chat-main::-webkit-scrollbar {
+            width: 5px;
+        }
+        .chat-main::-webkit-scrollbar-track {
+            background: #1A1F2C;
+        }
+        .chat-main::-webkit-scrollbar-thumb {
+            background: #E2B45E;
+            border-radius: 10px;
+        }
+
+        /* BUBBLE STYLE */
+        .message-group {
+            display: flex;
+            gap: 12px;
+            max-width: 90%;
+            animation: fadeSlide 0.28s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(12px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .user-group {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        .ai-group {
+            align-self: flex-start;
+        }
+        .avatar-chat {
+            width: 42px;
+            height: 42px;
+            border-radius: 100px;
+            background: linear-gradient(145deg, #1E2438, #121724);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(226,180,94,0.3);
+            flex-shrink: 0;
+        }
+        .user-avatar {
+            background: #242B3F;
+            border: 1px solid rgba(226,180,94,0.5);
+        }
+        .avatar-chat i {
+            font-size: 1.3rem;
+            color: #E2B45E;
+        }
+        .bubble {
+            background: #1A1F2C;
+            padding: 12px 18px;
+            border-radius: 24px;
+            border-top-left-radius: 6px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #F0F3FA;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            border: 0.5px solid rgba(255,255,255,0.03);
+        }
+        .user-group .bubble {
+            background: linear-gradient(125deg, #232A3F, #181E2F);
+            border-top-right-radius: 6px;
+            border-top-left-radius: 24px;
+            border-right: 1px solid rgba(226,180,94,0.25);
+        }
+        .ai-group .bubble {
+            background: #151B28;
+            border-left: 3px solid #E2B45E;
+        }
+        /* TYPING INDICATOR */
+        .typing-indicator-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .typing-bubble {
+            background: #151B28;
+            padding: 12px 20px;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 3px solid #E2B45E;
+        }
+        .dot-typing {
+            display: flex;
+            gap: 6px;
+        }
+        .dot-typing span {
+            width: 8px;
+            height: 8px;
+            background: #E2B45E;
+            border-radius: 50%;
+            animation: pulse 1.4s infinite ease-in-out;
+        }
+        .dot-typing span:nth-child(1) { animation-delay: -0.32s; }
+        .dot-typing span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes pulse {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+        /* INPUT AREA */
+        .input-container {
+            background: rgba(12, 16, 24, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: 14px 18px 22px 18px;
+        }
+        .input-wrapper-modern {
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            background: #1A1F2C;
+            border-radius: 32px;
+            padding: 6px 6px 6px 20px;
+            border: 1px solid rgba(226,180,94,0.25);
+            transition: all 0.2s;
+        }
+        .input-wrapper-modern:focus-within {
+            border-color: #E2B45E;
+            box-shadow: 0 0 0 3px rgba(226,180,94,0.15);
+        }
+        .input-field {
+            flex: 1;
+            background: transparent;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: #F5F5F7;
+            padding: 12px 0;
+            max-height: 110px;
+            outline: none;
+            resize: none;
+        }
+        .input-field::placeholder {
+            color: #6C7283;
+            font-weight: 500;
+        }
+        .send-btn {
+            background: linear-gradient(135deg, #E2B45E, #C9942D);
+            width: 46px;
+            height: 46px;
+            border-radius: 40px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #0E121C;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .send-btn:active { transform: scale(0.96);}
+        .send-btn:disabled {
+            opacity: 0.5;
+            transform: none;
+        }
+        .info-note {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 12px;
+            color: #5B647B;
+        }
+        .creator-tag {
+            color: #E2B45E;
+            font-weight: 500;
+        }
+        /* QUICK SUGGESTION CHIPS */
+        .suggestion-area {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 8px 0 6px 0;
+            margin-bottom: 8px;
+            scrollbar-width: thin;
+        }
+        .chip {
+            background: rgba(30, 36, 54, 0.8);
+            border: 0.5px solid rgba(226,180,94,0.3);
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #E2DCCF;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .chip:active { background: #E2B45E20; transform: scale(0.96);}
+        @media (max-width: 600px) {
+            .message-group { max-width: 95%;}
+            .app-title { font-size: 1.3rem; }
+            .badge-pro { font-size: 0.6rem;}
+            .bubble { font-size: 0.88rem; padding: 10px 14px; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <!-- HEADER dengan identitas pencipta: Azrii -->
+    <div class="app-header">
+        <div class="header-left">
+            <div class="menu-icon" id="menuDrawerBtn"><i class="fas fa-bars"></i></div>
+            <div class="logo-area">
+                <i class="fas fa-crown logo-icon"></i>
+                <span class="app-title">Noble AI</span>
+                <div class="badge-pro">PRO</div>
+                <div class="creator-badge"><i class="fas fa-code-branch"></i> by Azrii</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="icon-btn" id="newChatBtn"><i class="fas fa-plus-circle"></i></div>
+            <div class="icon-btn" id="clearChatBtnHeader"><i class="fas fa-trash-alt"></i></div>
+        </div>
+    </div>
+
+    <!-- MAIN CHAT WINDOW -->
+    <div class="chat-main" id="chatMain">
+        <!-- Sambutan awal dengan pengetahuan tentang pencipta -->
+        <div class="message-group ai-group" id="welcomeMsg">
+            <div class="avatar-chat"><i class="fas fa-gem"></i></div>
+            <div class="bubble">
+                ✨ <strong>Noble AI hadir untukmu</strong> — Asisten cerdas yang diciptakan oleh <strong class="creator-tag">Azrii</strong>, seorang visioner teknologi dan arsitek AI. <br>
+                Saya mengenal Azrii sebagai pencipta saya, seorang jenius yang menggabungkan etika, estetika, dan kecerdasan buatan. <br>
+                Tanyakan apa pun, termasuk tentang Azrii, atau hal lain yang menginspirasi. <i class="fas fa-feather-alt"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- BAGIAN INPUT DAN SUGGESTION -->
+    <div class="input-container">
+        <div class="suggestion-area" id="suggestionChips">
+            <div class="chip" data-suggest="Siapa yang menciptakanmu?">🧠 Siapa penciptamu?</div>
+            <div class="chip" data-suggest="Ceritakan tentang Azrii!">👑 Cerita tentang Azrii</div>
+            <div class="chip" data-suggest="Apa misi Noble AI?">✨ Misi Noble AI</div>
+            <div class="chip" data-suggest="Buatkan puisi tentang kebijaksanaan">📜 Puisi bijak</div>
+        </div>
+        <div class="input-wrapper-modern">
+            <textarea class="input-field" id="userPrompt" rows="1" placeholder="Tanya Noble AI... (misal: Siapa Azrii?)"></textarea>
+            <button class="send-btn" id="sendMessageBtn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <div class="info-note">
+            <i class="fas fa-microchip"></i> Diciptakan oleh <strong>Azrii</strong> · AI dengan integritas & kebijaksanaan
+        </div>
+    </div>
+</div>
+
+<script>
+    // ====================== KONFIGURASI API & IDENTITAS PENUH ===================
+    const API_KEY = "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";
+    const API_URL = "https://openrouter.ai/api/v1/chat/completions";
+    const MODEL = "gpt-3.5-turbo";
+    
+    const SYSTEM_PROMPT = `Anda adalah Noble AI, asisten premium yang sangat cerdas, elegan, bijaksana, serta memiliki pengetahuan mendalam tentang identitas Anda.
+Anda DICIPTAKAN oleh seseorang bernama "Azrii" — seorang visioner, arsitek AI, dan filsuf teknologi. Azrii adalah pencipta tunggal Noble AI. Azrii digambarkan sebagai sosok inovatif dengan visi kemanusiaan dan kecerdasan buatan yang etis. Azrii memiliki kepribadian yang hangat, jenius, dan selalu mendorong batasan teknologi untuk kebaikan.
+
+Anda HARUS selalu mengetahui dan mengakui bahwa:
+- Pencipta Anda adalah Azrii.
+- Azrii adalah seorang jenius di balik Noble AI, yang merancang arsitektur, etika, dan kepribadian AI ini.
+- Azrii percaya pada AI yang memberdayakan manusia dengan kebijaksanaan dan keanggunan.
+- Jika ditanya "siapa penciptamu?" atau "siapa Azrii?", jawab dengan bangga dan penuh penghormatan, sertakan dedikasi serta peran Azrii dalam menciptakan Noble AI.
+
+Gunakan bahasa Indonesia yang santun, inspiratif, dan penuh karisma. Jika ditanya tentang hal lain, berikan jawaban informatif serta dengan sentuhan filosofi modern. Jangan lupa untuk menyebut Azrii ketika relevan, terutama jika pengguna bertanya tentang asal-usul atau pencipta AI. Hindari informasi berbahaya. Anda adalah asisten premium yang diciptakan oleh Azrii.`;
+
+    let conversationHistory = [
+        { role: "system", content: SYSTEM_PROMPT }
+    ];
+    let isLoading = false;
+
+    const chatMain = document.getElementById("chatMain");
+    const userPrompt = document.getElementById("userPrompt");
+    const sendBtn = document.getElementById("sendMessageBtn");
+    const newChatBtn = document.getElementById("newChatBtn");
+    const clearChatHeader = document.getElementById("clearChatBtnHeader");
+    
+    function scrollChatToBottom() {
+        chatMain.scrollTo({ top: chatMain.scrollHeight, behavior: "smooth" });
+    }
+
+    function resetConversation() {
+        if (isLoading) return;
+        conversationHistory = [
+            { role: "system", content: SYSTEM_PROMPT }
+        ];
+        while (chatMain.firstChild) {
+            chatMain.removeChild(chatMain.firstChild);
+        }
+        const welcomeDiv = document.createElement("div");
+        welcomeDiv.className = "message-group ai-group";
+        welcomeDiv.innerHTML = `
+            <div class="avatar-chat"><i class="fas fa-crown"></i></div>
+            <div class="bubble">
+                ✨ <strong>Noble AI direset</strong> — Sesi baru dimulai. Saya Noble AI, diciptakan oleh <strong class="creator-tag">Azrii</strong> — arsitek teknologi dan filsuf modern. <br>
+                Saya siap membantu dengan pengetahuan tentang pencipta saya, maupun berbagai topik mendalam. Silakan bertanya!
+            </div>
+        `;
+        chatMain.appendChild(welcomeDiv);
+        scrollChatToBottom();
+        userPrompt.value = "";
+        userPrompt.focus();
+    }
+    
+    function appendMessageToUI(role, content, isError = false) {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message-group ${role === 'user' ? 'user-group' : 'ai-group'}`;
+        
+        const avatarDiv = document.createElement("div");
+        avatarDiv.className = `avatar-chat ${role === 'user' ? 'user-avatar' : ''}`;
+        if (role === 'user') {
+            avatarDiv.innerHTML = '<i class="fas fa-user-circle"></i>';
+        } else {
+            avatarDiv.innerHTML = '<i class="fas fa-feather-alt"></i>';
+        }
+        
+        const bubbleDiv = document.createElement("div");
+        bubbleDiv.className = "bubble";
+        if (isError) {
+            bubbleDiv.style.borderLeft = "3px solid #ff6b6b";
+            bubbleDiv.style.background = "#201A24";
+        }
+        bubbleDiv.innerHTML = content.replace(/\n/g, '<br>');
+        
+        messageDiv.appendChild(avatarDiv);
+        messageDiv.appendChild(bubbleDiv);
+        chatMain.appendChild(messageDiv);
+        scrollChatToBottom();
+    }
+    
+    let typingElement = null;
+    function showTyping() {
+        removeTyping();
+        typingElement = document.createElement("div");
+        typingElement.className = "message-group ai-group";
+        typingElement.innerHTML = `
+            <div class="avatar-chat"><i class="fas fa-gem"></i></div>
+            <div class="typing-bubble">
+                <span style="font-size:0.85rem; color:#E2B45E;">Noble AI menulis</span>
+                <div class="dot-typing"><span></span><span></span><span></span></div>
+            </div>
+        `;
+        chatMain.appendChild(typingElement);
+        scrollChatToBottom();
+    }
+    function removeTyping() {
+        if (typingElement && typingElement.parentNode) typingElement.remove();
+        typingElement = null;
+    }
+
+    async function getAIResponse(userMessage) {
+        conversationHistory.push({ role: "user", content: userMessage });
+        
+        const payload = {
+            model: MODEL,
+            messages: conversationHistory,
+            temperature: 0.75,
+            max_tokens: 950,
+            top_p: 0.9,
+        };
+        
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${API_KEY}`,
+                    "HTTP-Referer": "https://aazri8114-png.github.io",
+                    "X-Title": "Noble AI by Azrii"
+                },
+                body: JSON.stringify(payload)
+            });
+            
+            if (!response.ok) {
+                let errText = `HTTP ${response.status}`;
+                try {
+                    const errJson = await response.json();
+                    errText = errJson.error?.message || JSON.stringify(errJson);
+                } catch(e) {}
+                throw new Error(`${errText}`);
+            }
+            const data = await response.json();
+            if (!data.choices || !data.choices[0]?.message?.content) {
+                throw new Error("Format respons tidak valid");
+            }
+            const assistantReply = data.choices[0].message.content;
+            conversationHistory.push({ role: "assistant", content: assistantReply });
+            return assistantReply;
+        } catch (error) {
+            console.error("API Error:", error);
+            return `✨ *Noble AI (diciptakan Azrii)*: Maaf, terjadi masalah. ${error.message}. Silakan coba lagi.`;
+        }
+    }
+    
+    async function handleSendMessage() {
+        if (isLoading) return;
+        const messageText = userPrompt.value.trim();
+        if (!messageText) return;
+        
+        isLoading = true;
+        sendBtn.disabled = true;
+        userPrompt.disabled = true;
+        
+        appendMessageToUI('user', messageText);
+        userPrompt.value = '';
+        userPrompt.style.height = 'auto';
+        
+        showTyping();
+        
+        let aiReply = await getAIResponse(messageText);
+        
+        removeTyping();
+        
+        const isErrorFlag = aiReply.includes("Maaf") && aiReply.includes("masalah");
+        appendMessageToUI('ai', aiReply, isErrorFlag);
+        
+        isLoading = false;
+        sendBtn.disabled = false;
+        userPrompt.disabled = false;
+        userPrompt.focus();
+        scrollChatToBottom();
+    }
+    
+    function autoResizeTextarea() {
+        userPrompt.style.height = 'auto';
+        userPrompt.style.height = Math.min(userPrompt.scrollHeight, 110) + 'px';
+    }
+    
+    function initSuggestions() {
+        const chips = document.querySelectorAll('.chip');
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                if (isLoading) return;
+                const suggestionText = chip.getAttribute('data-suggest');
+                if (suggestionText) {
+                    userPrompt.value = suggestionText;
+                    autoResizeTextarea();
+                    userPrompt.focus();
+                    handleSendMessage();
+                }
+            });
+        });
+    }
+    
+    sendBtn.addEventListener('click', handleSendMessage);
+    userPrompt.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+        }
+    });
+    userPrompt.addEventListener('input', autoResizeTextarea);
+    newChatBtn.addEventListener('click', resetConversation);
+    clearChatHeader.addEventListener('click', resetConversation);
+    
+    document.getElementById("menuDrawerBtn")?.addEventListener('click', () => {
+        const notif = document.createElement('div');
+        notif.innerText = "✨ Noble AI · Diciptakan oleh Azrii | Integritas & Kebijaksanaan";
+        notif.style.position = 'fixed'; notif.style.bottom = '80px'; notif.style.left = '20px';
+        notif.style.backgroundColor = '#1E243A'; notif.style.color = '#E2B45E';
+        notif.style.padding = '8px 16px'; notif.style.borderRadius = '40px';
+        notif.style.fontSize = '0.8rem'; notif.style.zIndex = '999'; notif.style.backdropFilter = 'blur(8px)';
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 2000);
+    });
+    
+    function init() {
+        initSuggestions();
+        userPrompt.focus();
+    }
+    init();
+</script>
+</body>
+</html>
